@@ -1,11 +1,12 @@
 import "./new.scss";
-import { useState } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
+import { useState } from "react";
 
 const New = ({ inputs, title }) => {
   const [file, setFile] = useState("");
+
   return (
     <div className="new">
       <Sidebar />
@@ -38,6 +39,7 @@ const New = ({ inputs, title }) => {
                   style={{ display: "none" }}
                 />
               </div>
+
               {inputs.map((input) => (
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>

@@ -1,7 +1,7 @@
 import "./global.scss";
 import Home from "./pages/home/Home";
 import List from "./pages/list/List";
-import New from "./pages/new/New";
+import NewUser from "./pages/newUser/NewUser";
 import Single from "./pages/single/Single";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { productInputs, userInputs } from "./formSource";
@@ -10,6 +10,9 @@ import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import Login from "./pages/login/Login";
 import { AuthContext } from "./context/AuthContext";
+import ProductList from "./pages/productList/ProductList";
+import NewProduct from "./pages/newProduct/NewProduct";
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from "@apollo/client";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -20,9 +23,17 @@ function App() {
     return currentUser ? children : <Navigate to="/login" />;
   };
 
+  const client = new ApolloClient({
+    cache: new InMemoryCache(),
+      uri: "http://localhost:9002/graphql",
+      fetch,
+  
+  });
+
   return (
     <div className={darkMode ? "app dark" : "app"}>
       <BrowserRouter>
+      <ApolloProvider client={client}>
         <Routes>
           <Route path="/">
             <Route path="login" element={<Login />} />
@@ -30,6 +41,7 @@ function App() {
               index
               element={
                 <RequireAuth>
+                  
                   <Home />
                 </RequireAuth>
               }
@@ -55,7 +67,7 @@ function App() {
                 path="new"
                 element={
                   <RequireAuth>
-                    <New inputs={userInputs} title="Add New User" />
+                    <NewUser inputs={userInputs} title="Add New User" />
                   </RequireAuth>
                 }
               />
@@ -65,7 +77,7 @@ function App() {
                 index
                 element={
                   <RequireAuth>
-                    <List />
+                    <ProductList />
                   </RequireAuth>
                 }
               />
@@ -81,13 +93,17 @@ function App() {
                 path="new"
                 element={
                   <RequireAuth>
-                    <New inputs={productInputs} title="Add New Product" />
+                    <NewProduct
+                      inputs={productInputs}
+                      title="Add New Product"
+                    />
                   </RequireAuth>
                 }
               />
             </Route>
           </Route>
         </Routes>
+        </ApolloProvider>
       </BrowserRouter>
     </div>
   );

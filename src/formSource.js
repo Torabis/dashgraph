@@ -45,7 +45,7 @@ export const userInputs = [
 export const productInputs = [
   {
     id: 1,
-    label: "Title",
+    label: "Product",
     type: "text",
     placeholder: "Apple Macbook Pro",
   },
